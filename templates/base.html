@@ -8,11 +8,38 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <a href="{% url 'OLSHOPORIFLAME:home' %}">Home</a>
-    <a href="{% url 'OLSHOPORIFLAME:about' %}">About us</a>
-    <a href="{% url 'OLSHOPORIFLAME:contact' %}">Contact us</a>
-    <a href="{% url 'OLSHOPORIFLAME:allproducts' %}">Categories</a>
+    <div class="container">
+        <a href="{% url 'OLSHOPORIFLAME:home' %}">Home</a> |
+        <a href="{% url 'OLSHOPORIFLAME:about' %}">About us</a> |
+        <a href="{% url 'OLSHOPORIFLAME:contact' %}">Contact us</a> |
+        <a href="{% url 'OLSHOPORIFLAME:allproducts' %}">Categories</a> |
+        <a href="{% url 'OLSHOPORIFLAME:mycart' %}">View Cart</a>|
+
+        {% if request.user.customer %}
+        Welcome {{request.user.username}}!
+        <a href="{% url 'OLSHOPORIFLAME:customerlogout' %}">Logout</a> |
+        {% else %}
+        <a href="{% url 'OLSHOPORIFLAME:customerregistration' %}">Registrasi</a> |
+        <a href="{% url 'OLSHOPORIFLAME:customerlogin' %}">Login</a>
+        {% endif %}
+
+    </div>
     <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <form action="{% url 'OLSHOPORIFLAME:search' %}" method="GET">
+                    <input type="text" name="keyword" placeholder="Search product here..." required> 
+                    <button>Cari produk</button>
+                </form>
+                    
+            </div>
+        </div>
+    </div>
+
+
+
+
    {% block content %} 
    {% endblock %}
 

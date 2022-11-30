@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} My cart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Produk dalam keranjang</h4><hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Produk</th>
+                        <th>Harga</th>
+                        <th>Kuantitas</th>
+                        <th>Subtotal</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in cart.cartproduct_set.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{cp.product.title}}</td>
+                        <td>{{cp.rate}}</td>
+                        <td>{{cp.quantity}}</td>
+                        <td>{{cp.subtotal}}</td>
+                       <td>
+                        <a href="{% url 'OLSHOPORIFLAME:managecart' cp.id %}?action=inc" class="btn btn-primary"> + </a>
+                        <a href="{% url 'OLSHOPORIFLAME:managecart' cp.id %}?action=dcr" class="btn btn-warning"> - </a>
+                        <a href="{% url 'OLSHOPORIFLAME:managecart' cp.id %}?action=rmv" class="btn btn-danger"> x </a>
+                       </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4" class="text-right">Total</th>
+                        <th>Rp. {{cart.total}}</th>
+                        {% if cart.cartproduct_set %}
+                        <th><a href="{% url 'OLSHOPORIFLAME:emptycart' %}">Empty Cart</a></th>
+                        {% endif %}
+
+                    </tr>
+                {% if cart.cartproduct_set.all %}
+                <tr>
+                    <th><a class="btn btn-info" href="{% url 'OLSHOPORIFLAME:checkout' %}">Checkout</a></th>
+                </tr>
+                {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
