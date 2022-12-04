@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
 
 # Create your models here.
 
@@ -28,8 +28,8 @@ class Product(models.Model):
     slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="products")
-    marked_price = models.PositiveIntegerField()
-    selling_price = models.PositiveIntegerField()
+    marked_price = models.CharField(max_length=50, null=True)
+    selling_price = models.CharField(max_length=50, null=True)
     description = models.TextField()
     warranty = models.CharField(max_length=300, null=True, blank=True)
     return_policy = models.CharField(max_length=300, null=True, blank=True)
@@ -84,6 +84,7 @@ class Order(models.Model):
 
     def __str__(self):
         return "Order: " + str(self.id)
+
 
 
 

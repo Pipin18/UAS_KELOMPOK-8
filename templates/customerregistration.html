@@ -15,7 +15,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 {{form.as_p}}
-                <button class="btn btn-primary">Pendaftaran Pelanggan</button>
+                <button class="btn btn-primary">Daftar</button>
             </form>
             <p> Apakah anda sudah mempunyai akun? <a href="{% url 'OLSHOPORIFLAME:customerlogin' %}{% if request.GET.next %}?next={{request.GET.next}}{% endif %}">Masuk Disini</a></p>
         </div>

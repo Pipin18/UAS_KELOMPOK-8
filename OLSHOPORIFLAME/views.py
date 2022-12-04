@@ -1,4 +1,4 @@
-from django.views.generic import View, TemplateView, CreateView, FormView
+from django.views.generic import View, TemplateView, CreateView, FormView, DetailView
 from .forms import CheckoutForm, CustomerRegistrationForm, CustomerLoginForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -127,8 +127,6 @@ class EmptyCartView(View):
 
 
 
-
-
 class MyCartView(TemplateView):
     template_name = "mycart.html"
 
@@ -141,6 +139,7 @@ class MyCartView(TemplateView):
             cart = None
         context['cart'] = cart
         return context
+        
 
 class CheckoutView(CreateView):
     template_name = "checkout.html"
@@ -166,12 +165,10 @@ class CheckoutView(CreateView):
             form.instance.discount = 0
             form.instance.total = cart_obj.total
             form.instance.order_status = "Order Received"
-           
+            del self.request.session['cart_id']
         else:
-
             return redirect("OLSHOPORIFLAME:home")
         return super().form_valid(form)
-
 
 class CustomerRegistrationView(CreateView):
     template_name = "customerregistration.html"
@@ -222,6 +219,25 @@ class ContactView(TemplateView):
     template_name = "contactus.html"
 
 
+class CustomerProfileView(TemplateView):
+    template_name = "customerprofile.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+            pass
+        else:
+            return redirect("/login/?next=/profile/")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer = self.request.user.customer
+        context['customer'] = customer
+        orders = Order.objects.filter(cart__customer=customer).order_by("-id")
+        context["orders"] = orders
+        return context
+
+
 class SearchView(TemplateView):
     template_name = "search.html"
 
@@ -234,3 +250,20 @@ class SearchView(TemplateView):
         print(results)
         context["results"] = results
         return context
+
+
+class CustomerOrderDetailView(DetailView):
+    template_name = "customerorderdetail.html"
+    model = Order
+    context_object_name = "ord_obj"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and Customer.objects.filter(user=request.user).exists():
+            order_id = self.kwargs["pk"]
+            order = Order.objects.get(id=order_id)
+            if request.user.customer != order.cart.customer:
+                return redirect("ecomapp:customerprofile")
+        else:
+            return redirect("/login/?next=/profile/")
+        return super().dispatch(request, *args, **kwargs)
+

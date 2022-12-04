@@ -12,7 +12,7 @@
     <div class="col-md-3">
     <div class="m-4">
     <h4><a href="{% url 'OLSHOPORIFLAME:productdetail' p.slug %}">{{p.title}}</a></h4>
-        <img src="{{p.image.url}}" alt="" class="img-fluid" style="height:2500; object-fit: cover;"> 
+        <img src="{{p.image.url}}" alt="" class="img-fluid" style="height:200px; object-fit: cover;"> 
         <p class="mt-3">Harga: <strike>Rp. {{p.marked_price}}</strike> Rp. {{p.selling_price}}</p>
         <a href="{% url 'OLSHOPORIFLAME:addtocart' p.id %}" class="btn btn-primary">Tambah ke keranjang</a>
     </div>
